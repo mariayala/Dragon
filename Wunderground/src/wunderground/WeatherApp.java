@@ -16,7 +16,7 @@ public class WeatherApp {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		String key; // authentication key i.e 5ea90be14bf1bd23
+		String key; // authentication key i.e 1b096d97a830f4bf
 		String iURL; // URL - no data params
 		String lURL; // Complete URL
 		String city, state;
@@ -54,6 +54,7 @@ public class WeatherApp {
 		
 		// put together url params
 		String params = state + "/" + city + ".json";
+		
 		// build complete lookup URL
 		HourlyForecast hourly = new HourlyForecast(iURL, params);
 		
