@@ -30,6 +30,10 @@ In program1.java, the "Help, OK, Advanced & Cancel"
 buttons do not resize with the window as instructed but
 everything else works.
 
+could not run my program on tux, kept getting the following error.
+
+"no x11 variable was set" and "can't connect to X11 window server using "0.0" as the value of the DISPLAY variable"
+ but the jar files run in the terminal off tux and I have also included my eclipse projects. 
 ---------------------
 Notes
 ---------------------
