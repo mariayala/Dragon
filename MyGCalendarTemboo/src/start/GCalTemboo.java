@@ -1,3 +1,7 @@
+/*
+ * CS275 : OAuth Lab - Temboo
+ * Maria A Yala
+ */
 package start;
 
 import java.text.DateFormat;
@@ -69,7 +73,7 @@ public class GCalTemboo {
 		callbackID = initializeOAuthResults.get_CallbackID();
 		
 		System.out.println("Initialize OAuth");
-		System.out.println("Go to the url below and click allow:");
+		System.out.println("Go to the url below and click allow then click enter here: ");
 		System.out.println(authorizationURL);
 		
 		Scanner console = new Scanner(System.in);
