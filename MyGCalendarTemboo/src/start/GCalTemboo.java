@@ -119,7 +119,7 @@ public class GCalTemboo {
 		JsonElement root = jp.parse(getAllCalendarsResults.get_Response());
 		rootObject = root.getAsJsonObject();
 		
-		System.out.println(refresh_token);
+		System.out.println("");
 	}
 	
 	private static void printTheCalendars() throws TembooException, ParseException {
@@ -163,21 +163,25 @@ public class GCalTemboo {
 		for(i = 0; i<events.size(); i++){
 			JsonElement jelement = events.get(i);
 			String summary = jelement.getAsJsonObject().get("summary").getAsString();
-			String when = jelement.getAsJsonObject().get("start").getAsJsonObject().get("dateTime").getAsString();
+			JsonElement datetime = jelement.getAsJsonObject().get("start").getAsJsonObject().get("dateTime");
+			String when;
 			java.util.Date edate;
-			if(when != null){
-			// 2011-05-19T12:00:00-04:00
+			if(datetime != null){
+			// Date is in this format : - 2011-05-19T12:00:00-04:00
+				when = datetime.getAsString();
 				DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'-04:00'", Locale.ENGLISH);
 				edate = df.parse(when);
 			} else {
-				// 2011-05-19
+				// Date is in this format : - 2011-05-19
 				when = jelement.getAsJsonObject().get("start").getAsJsonObject().get("date").getAsString();
 				DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 				edate = df.parse(when);
 			}
 			
+			System.out.println("*");
 			System.out.println("Event Title : " + summary);
 			System.out.println("On : " + edate);
+			System.out.println();
 			
 		}
 	}
