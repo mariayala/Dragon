@@ -71,6 +71,7 @@ int main(int argc, char ** argv) {
 	cvResize(res, smallRes, CV_INTER_CUBIC);
 	printf("saving scaled image to out.jpg\n");
 	cvSaveImage("out.jpg", smallRes, NULL );
+	cvSaveImage("out_large.jpg", res, NULL );
 
 	return EXIT_SUCCESS;
 }
