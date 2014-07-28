@@ -199,7 +199,7 @@ CvScalar* getAvgColors(IplImage** images, int numImages) {
 }
 
 /**
- * Given an ordered list of images (iclosest), creates a
+ * Given an ordered list of images (closest), creates a
  * numColumns x numRows grid in a new image, copies each image in, and returns the result.
  *
  * Thus, if numColumns is 10, numRows is 5, and each iclosest image is 64x64, the resulting image
@@ -209,36 +209,52 @@ CvScalar* getAvgColors(IplImage** images, int numImages) {
  * @param numColumns  	Number of horizontal cells
  * @param numRows		Number of vertical cells
  */
-IplImage* stitchImages(IplImage** iclosest, int numColumns, int numRows) {
+IplImage* stitchImages(IplImage** closest, int numColumns, int numRows) {
 	int j = 0, // for iterating over the rows
 	    i = 0; // for iterating over the columns
 	printf("Starting stitch\n");
 
-	// TODO: using cvGetSize, get the size of the first image in iclosest.
+	// using cvGetSize, get the size of the first image in iclosest.
 	// remember all of the images should be the same size
-	const CvArr* arr = iclosest[i];
+	const CvArr* arr = closest[i];
 	CvSize firstSize = cvGetSize(arr);
 
-	// TODO: Compute the size of the final destination image.
-	int height = firstSize.height; 
-	int width = firstSize.width;
-	int fheight = numRows*height;
-	int fwidth = numColumns*width;
+	// Compute the size of the final destination image.
+	int cellheight = firstSize.height; 
+	int cellwidth = firstSize.width;
+	// final dimensions
+	int fheight = numRows*cellheight;
+	int fwidth = numColumns*cellwidth;
 
 	CvSize finalSize = cvSize(fwidth,fheight);
-   printf("Initial image is %dx%d\n", height, width);
+
+   printf("Initial image is %dx%d\n", cellheight, cellwidth);
 	printf("Final %dx%d\n", finalSize.height, finalSize.width); 
-	// TODO: allocate the return image. This can be potentially large, so
+
+	// allocate the return image. This can be potentially large, so
 	// you should make sure the result is not null
-
-	// TODO: iterate over each cell and copy the closest image into it
-
-			// TODO: set the ROI of the result
-
-			// TODO: copy the proper image into the result
-
-			// TODO: reset the ROI of the result
-
-	// TODO: return the result
-
+	IplImage *fImgptr;
+	fImgptr = cvCreateImage(finalSize,closest[0]->depth,closest[0]->nChannels);
+	if(fImgptr == NULL){
+	 fprintf(stderr,"Not enough memory for Final image\n");
+	 exit(0);
+	}
+	
+	int k = 0; // iterator
+	//iterate over each cell and copy the closest image into it
+	// going row by row
+	for( j ; j < numRows; j+=cellheight){
+		   // for each column in that row
+         for( i ; i < numColumns; i+=cellwidth){
+				// set the ROI of the result
+	      	cvSetImageROI(fImgptr, cvRect(i,j,cellwidth,cellheight));		
+				// copy the proper image into the result
+				cvCopy(closest[k],fImgptr,NULL);
+				// reset the ROI of the result
+				cvResetImageROI(fImgptr);
+			}
+			k++;
+   }
+	// return the result
+	return fImgptr;
 }
