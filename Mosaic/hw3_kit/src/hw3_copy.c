@@ -245,21 +245,18 @@ IplImage* stitchImages(IplImage** closest, int numColumns, int numRows) {
 	//iterate over each cell and copy the closest image into it
 	// going row by row
 	for( j ; j < fheight; j+=cellheight){
-		printf(" j%d, ",j);
 		   // for each column in that row
          for( i ; i < fwidth; i+=cellwidth){
-				printf(" i%d, ",i);
 				cc = cc + 1;
 				// set the ROI of the result
 	      	cvSetImageROI(fImgptr, cvRect(i,j,cellwidth,cellheight));		
 				// copy the proper image into the result
-				cvCopy(closest[0],fImgptr,NULL);
+				cvCopy(closest[i],fImgptr,NULL);
 				// reset the ROI of the result
 				cvResetImageROI(fImgptr);
 				// increment k
 				k++;
 			}
-			k=0;
 			rc = rc + 1;
    }
 	printf("Rows %d Columns %d",rc,cc);
