@@ -209,14 +209,14 @@ CvScalar* getAvgColors(IplImage** images, int numImages) {
  * @param numColumns  	Number of horizontal cells
  * @param numRows		Number of vertical cells
  */
-IplImage* stitchImages(IplImage** closest, int numColumns, int numRows) {
+IplImage* stitchImages(IplImage** iclosest, int numColumns, int numRows) {
 	int j = 0, // for iterating over the rows
 	    i = 0; // for iterating over the columns
 	printf("Starting stitch\n");
 
 	// using cvGetSize, get the size of the first image in iclosest.
 	// remember all of the images should be the same size
-	const CvArr* arr = closest[i];
+	const CvArr* arr = iclosest[i];
 	CvSize firstSize = cvGetSize(arr);
 
 	// Compute the size of the final destination image.
@@ -228,41 +228,38 @@ IplImage* stitchImages(IplImage** closest, int numColumns, int numRows) {
 
 	CvSize finalSize = cvSize(fwidth,fheight);
 
-   printf("Initial image is %dx%d\n", cellheight, cellwidth);
-	printf("Final %dx%d\n", finalSize.height, finalSize.width); 
+   printf("**Each cell image is %dx%d\n", cellheight, cellwidth);
+	printf("***Final image is %dx%d\n", finalSize.height, finalSize.width); 
 
 	// allocate the return image. This can be potentially large, so
 	// you should make sure the result is not null
 	IplImage *fImgptr;
-	fImgptr = cvCreateImage(finalSize,closest[0]->depth,closest[0]->nChannels);
+	fImgptr = cvCreateImage(finalSize,iclosest[0]->depth,iclosest[0]->nChannels);
 	if(fImgptr == NULL){
 	 fprintf(stderr,"Not enough memory for Final image\n");
 	 exit(0);
 	}
    
-   int cc, rc = 0;	
 	int k = 0; // iterator
 	//iterate over each cell and copy the closest image into it
 	// going row by row
+
 	for( j ; j < fheight; j+=cellheight){
-		printf(" j%d, ",j);
+		// printf("r %d ",j);
 		   // for each column in that row
          for( i ; i < fwidth; i+=cellwidth){
-				printf(" i%d, ",i);
-				cc = cc + 1;
+				// printf("c %d ",i);
 				// set the ROI of the result
 	      	cvSetImageROI(fImgptr, cvRect(i,j,cellwidth,cellheight));		
 				// copy the proper image into the result
-				cvCopy(closest[0],fImgptr,NULL);
+				cvCopy(iclosest[k],fImgptr,NULL);
 				// reset the ROI of the result
 				cvResetImageROI(fImgptr);
 				// increment k
 				k++;
 			}
-			k=0;
-			rc = rc + 1;
+			i = 0;
    }
-	printf("Rows %d Columns %d",rc,cc);
 	// return the result
 	return fImgptr;
 }
